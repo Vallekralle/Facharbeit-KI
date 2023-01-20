@@ -20,7 +20,7 @@ class Graph:
         plt.title("Modell-Verluste")
         plt.xlabel("X-Achse")
         plt.ylabel("Y-Achse")
-        plt.plot(x, y, color="black")
+        plt.plot(x, y, color="black", linewidth=2)
         
         
     def setzteVerluste(self):

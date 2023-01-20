@@ -37,13 +37,13 @@ class Model(tf.keras.Model):
             "Gerundetes Ergebniss: " + np.array2string(np.rint(ergebniss)))
 
 
-x = [1, 2, 3, 4]
-y = [2, 4, 6, 8]
+x = [1, 2, 3, 4, 5]
+y = [2, 4, 6, 8, 10]
 
-epochen = 10
-yZahlVorhersagen = 15
+epochen = 50
+xZahlVorhersagen = 20
 
-modell = Model(x, y, epochen, yZahlVorhersagen)
+modell = Model(x, y, epochen, xZahlVorhersagen)
 vorhersage = modell.vorhersagen()
 
-graph = Graph(epochen, yZahlVorhersagen, modell.verlustListe.history)
+graph = Graph(epochen, xZahlVorhersagen, modell.verlustListe.history)
