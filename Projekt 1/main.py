@@ -17,7 +17,7 @@ bildBreite, bildHoehe = 300, 300
 
 # Variablen der Zeichenflaeche
 bloeckeAnzahl = 50 
-rasterBloecke = []
+bloeckListe = []
 SCHWARZ = (0, 0, 0)
 
 # Variablen für die Knoepfe
@@ -27,6 +27,8 @@ ROT = (255, 0, 0)
 
 
 def main():
+    global bloeckListe
+    
     laufen = True
     pressed = bool
     
@@ -41,6 +43,8 @@ def main():
                 pressed = True
             if event.type == pygame.MOUSEBUTTONUP:
                 if zurueckKnf.gedrueckt(pygame.mouse.get_pos()):
+                    # Liste leeren, damit sich die Bloecke nicht stappeln
+                    bloeckListe = [] 
                     erzeugeZeichenFlaeche()
                 pressed = False
             if event.type == pygame.MOUSEMOTION and pressed == True:
@@ -52,7 +56,7 @@ def main():
 def zeichnen(pFenster):
     pFenster.fill(WEIß)
     
-    for bloeck in rasterBloecke:
+    for bloeck in bloeckListe:
         bloeck.zeichnen(pFenster)
         
     zurueckKnf.zeichnen(pFenster)
@@ -71,7 +75,7 @@ def erzeugeZeichenFlaeche():
     
     for _ in range(bloeckeAnzahl):
         for _ in range(bloeckeAnzahl):
-            rasterBloecke.append(Bloecke(x, y, breite, hoehe, 
+            bloeckListe.append(Bloecke(x, y, breite, hoehe, 
                                          (240, 240, 240)))
             x += breite
         y += hoehe
@@ -95,7 +99,7 @@ def erzeugeZurueckKnf(pY):
 
 
 def malen(mousePos):
-    for bloeck in rasterBloecke:
+    for bloeck in bloeckListe:
         if bloeck.gedrueckt(mousePos):
             bloeck.farbe = SCHWARZ
 
