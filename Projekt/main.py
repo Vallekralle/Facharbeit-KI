@@ -47,7 +47,7 @@ def main():
                     bloeckListe = [] 
                     erzeugeZeichenFlaeche()
                 pressed = False
-            if event.type == pygame.MOUSEMOTION and pressed == True:
+            if pressed == True or event.type == pygame.MOUSEMOTION and pressed == True:
                 malen(pygame.mouse.get_pos())
             
         zeichnen(FENSTER)
