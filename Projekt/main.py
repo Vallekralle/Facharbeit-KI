@@ -1,5 +1,11 @@
+# Module von außen
 import pygame
+import time
+from PIL import ImageGrab
+
+# Eigene Module
 from bloecke import Bloecke
+
 pygame.init()
 
 
@@ -25,6 +31,10 @@ zurueckText = startText = ""
 zurueckKnf = startKnf = object
 ROT = (255, 0, 0)
 GRUEN = (0, 255, 0)
+
+# Attribute für die Bilder
+pfad = "Projekt/img/"
+bild = object
 
 
 def main():
@@ -53,7 +63,7 @@ def main():
                     erzeugeZeichenFlaeche()
                     
                 if startKnf.gedrueckt(pygame.mouse.get_pos()):
-                    print("Der Knopf zum starten des KNN wurde gedrückt!")
+                    bildschrimFoto()
                     
             if pressed == True or event.type == pygame.MOUSEMOTION and pressed == True:
                 malen(pygame.mouse.get_pos())
@@ -64,14 +74,17 @@ def main():
 def zeichnen(pFenster):
     pFenster.fill(WEIß)
     
+    # Alle Bloecke der Zeichenflaeche
     for bloeck in bloeckListe:
         bloeck.zeichnen(pFenster)
         
+    # Zeichne den Zurueckknopf mit seinem Text
     zurueckKnf.zeichnen(pFenster)
     pFenster.blit(zurueckText, 
                 (zurueckKnf.x + (zurueckKnf.breite // 2 - zurueckText.get_width() // 2), 
                 zurueckKnf.y + (zurueckKnf.hoehe // 2 - zurueckText.get_height() // 2)))
     
+    # Zeichne den Startknopf mit seinem Text
     startKnf.zeichnen(pFenster)
     pFenster.blit(startText, (startKnf.x + (startKnf.breite // 2 - startText.get_width() // 2), 
                 startKnf.y + (startKnf.hoehe // 2 - startText.get_height() // 2)))
@@ -133,6 +146,14 @@ def malen(mousePos):
     for bloeck in bloeckListe:
         if bloeck.gedrueckt(mousePos):
             bloeck.farbe = SCHWARZ
+            
+            
+def bildschrimFoto():
+    global bild
+    
+    bild = ImageGrab.grab(bbox=(0, 0, BREITE, HOEHE))
+    datum = str(time.ctime()).replace(":", "-") + ".png"
+    bild.save(pfad + datum, "png")
 
 
 if __name__ == '__main__':
