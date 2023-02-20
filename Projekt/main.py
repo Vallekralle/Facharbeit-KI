@@ -1,7 +1,6 @@
 # Module von außen
 import pygame
 import time
-from PIL import ImageGrab
 
 # Eigene Module
 from bloecke import Bloecke
@@ -24,6 +23,10 @@ bildBreite, bildHoehe = 300, 300
 # Variablen der Zeichenflaeche
 bloeckeAnzahl = 50 
 bloeckListe = []
+
+flaechenBreite = flaechenHoehe = bildBreite / bloeckeAnzahl
+flaechenX = flaechenY = BREITE / 2 - flaechenBreite * bloeckeAnzahl / 2
+
 SCHWARZ = (0, 0, 0)
 
 # Variablen für die Knoepfe
@@ -93,18 +96,17 @@ def zeichnen(pFenster):
     
     
 def erzeugeZeichenFlaeche():
-    breite = hoehe = bildBreite / bloeckeAnzahl
-    x = y = BREITE / 2 - breite * bloeckeAnzahl / 2
+    x, y = flaechenX, flaechenY
     
     erzeugeZurueckKnf(y)
     
     for _ in range(bloeckeAnzahl):
         for _ in range(bloeckeAnzahl):
-            bloeckListe.append(Bloecke(x, y, breite, hoehe, 
-                                         (240, 240, 240)))
-            x += breite
-        y += hoehe
-        x = x - breite * bloeckeAnzahl
+            bloeckListe.append(Bloecke(x, y, flaechenBreite, 
+                                       flaechenHoehe, (240, 240, 240)))
+            x += flaechenBreite
+        y += flaechenHoehe
+        x = x - flaechenBreite * bloeckeAnzahl
         
     erzeugeStartKnf(y)
     
@@ -151,9 +153,10 @@ def malen(mousePos):
 def bildschrimFoto():
     global bild
     
-    bild = ImageGrab.grab(bbox=(0, 0, BREITE, HOEHE))
     datum = str(time.ctime()).replace(":", "-") + ".png"
-    bild.save(pfad + datum, "png")
+    bild = FENSTER.subsurface(pygame.Rect(flaechenX, flaechenY, 
+                                          bildBreite, bildHoehe))
+    pygame.image.save(bild, pfad + datum)
 
 
 if __name__ == '__main__':
