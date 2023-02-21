@@ -32,6 +32,7 @@ SCHWARZ = (0, 0, 0)
 # Variablen für die Knoepfe
 zurueckText = startText = ""
 zurueckKnf = startKnf = object
+font = pygame.font.SysFont("monospace", 25)
 ROT = (255, 0, 0)
 GRUEN = (0, 255, 0)
 
@@ -66,7 +67,7 @@ def main():
                     erzeugeZeichenFlaeche()
                     
                 if startKnf.gedrueckt(pygame.mouse.get_pos()):
-                    bildschrimFoto()
+                    bildschirmFoto()
                     
             if pressed == True or event.type == pygame.MOUSEMOTION and pressed == True:
                 malen(pygame.mouse.get_pos())
@@ -116,7 +117,6 @@ def erzeugeZurueckKnf(pY):
     global zurueckKnf
     
     # Der Text für den Knopf
-    font = pygame.font.SysFont("monospace", 25)
     zurueckText = font.render("zurück", 1, (0, 0, 0))
     
     # Der Knopf
@@ -132,7 +132,6 @@ def erzeugeStartKnf(pY):
     global startKnf
     
     # Der Text für den Knopf
-    font = pygame.font.SysFont("monospace", 25)
     startText = font.render("starten", 1, (0, 0, 0))
     
     # Der Knopf
@@ -150,7 +149,7 @@ def malen(mousePos):
             bloeck.farbe = SCHWARZ
             
             
-def bildschrimFoto():
+def bildschirmFoto():
     global bild
     
     datum = str(time.ctime()).replace(":", "-") + ".png"
