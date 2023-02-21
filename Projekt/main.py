@@ -1,4 +1,4 @@
-# Module von außen
+# Module von außen 
 import pygame
 import time
 
@@ -16,11 +16,8 @@ pygame.display.set_caption(
 FPS = 120
 WEIß = (255, 255, 255)
 
-# Bildbreite für Raster und Modell festlegen
+# Variablen für die Zeichenflaeche und das Modell
 bildBreite, bildHoehe = 300, 300
-
-
-# Variablen der Zeichenflaeche
 bloeckeAnzahl = 50 
 bloeckListe = []
 
