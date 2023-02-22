@@ -1,10 +1,14 @@
 # Module von außen 
 import pygame
 import time
+import cv2
+import numpy as np
 from PIL import Image
+import tensorflow as tf
 
 # Eigene Module
 from bloecke import Bloecke
+from Modell import name
 
 pygame.init()
 
@@ -28,15 +32,20 @@ flaechenX = flaechenY = BREITE / 2 - flaechenBreite * bloeckeAnzahl / 2
 SCHWARZ = (0, 0, 0)
 
 # Variablen für die Knoepfe
-zurueckText = startText = ""
+zurueckText = startText = str
 zurueckKnf = startKnf = object
 font = pygame.font.SysFont("monospace", 25)
 ROT = (255, 0, 0)
 GRUEN = (0, 255, 0)
 
-# Attribute für die Bilder
+# Variablen für die Bilder
 pfad = "Projekt/img/"
 bild = object
+
+# Laden des zuvor erstellten Modelles und Variablen
+modell = tf.keras.models.load_model(name)
+vorhersageText = font.render("Schreibe eine Zahl und drücke start!",
+                             1, SCHWARZ)
 
 
 def main():
@@ -91,6 +100,9 @@ def zeichnen(pFenster):
     pFenster.blit(startText, (startKnf.x + (startKnf.breite // 2 - startText.get_width() // 2), 
                 startKnf.y + (startKnf.hoehe // 2 - startText.get_height() // 2)))
     
+    # Zeichnen der Ausgabe des Modelles
+    pFenster.blit(vorhersageText, (BREITE // 2 - vorhersageText.get_width() // 2, 20))
+    
     pygame.display.update()
     
     
@@ -115,7 +127,7 @@ def erzeugeZurueckKnf(pY):
     global zurueckKnf
     
     # Der Text für den Knopf
-    zurueckText = font.render("zurück", 1, (0, 0, 0))
+    zurueckText = font.render("zurück", 1, SCHWARZ)
     
     # Der Knopf
     x = BREITE // 2 - zurueckText.get_width() // 2
@@ -130,7 +142,7 @@ def erzeugeStartKnf(pY):
     global startKnf
     
     # Der Text für den Knopf
-    startText = font.render("starten", 1, (0, 0, 0))
+    startText = font.render("starten", 1, SCHWARZ)
     
     # Der Knopf
     x = BREITE // 2 - startText.get_width() // 2
@@ -161,6 +173,23 @@ def bildschirmFoto():
     neueGroesse = bild.resize((28, 28))
     neueGroesse.save(pfad + datum)
     
+    # Lasse nun das Modell die Zahl herausfinden
+    gebeBildModell(datum)
+    
+    
+def gebeBildModell(datum):
+    global vorhersageText
+    
+    # Bild mit cv2 lesen
+    bildModell = cv2.imread(pfad + datum)[:,:,0]
+    # Aendern der Farben (schwarz <-> weiss)
+    bildModell = np.invert(np.array([bildModell]))
+    
+    # Nun wird das Bild dem KNN gegeben
+    vorhersage = modell.predict(bildModell)
+    
+    text = f"Es handelt sich um eine {np.argmax(vorhersage)}"
+    vorhersageText = font.render(text, 1, SCHWARZ)
 
 
 if __name__ == '__main__':

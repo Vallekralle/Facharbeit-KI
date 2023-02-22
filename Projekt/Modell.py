@@ -45,24 +45,30 @@ class Modell:
         self.modell.save(self.name)
 
 
-# Trainingssätze und Testsätze für KNN
-datenSatz = tf.keras.datasets.mnist
-(xTraining, yTraining), (xTest, yTest) = datenSatz.load_data()
-
-xTraining = tf.keras.utils.normalize(xTraining, axis=1)
-xTest = tf.keras.utils.normalize(xTest, axis=1)
-
 name = "HandschriftModell"
 
-# Training
-modell = Modell(xTraining, yTraining, name)
-modell.traniereModell()
 
-print("_______Fertig mit trainieren, nun wird getestet!_______")
+def main():
+    # Trainingssätze und Testsätze für KNN
+    datenSatz = tf.keras.datasets.mnist
+    (xTraining, yTraining), (xTest, yTest) = datenSatz.load_data()
 
-# Testen
-modell = tf.keras.models.load(name)
-verlust, ganauigkeit = modell.evaluate(xTest, yTest)
+    xTraining = tf.keras.utils.normalize(xTraining, axis=1)
+    xTest = tf.keras.utils.normalize(xTest, axis=1)
+    
+    # Training
+    modell = Modell(xTraining, yTraining, name)
+    modell.traniereModell()
 
-print(f"Der Verlust liegt bei: {verlust}" +
-      f"und die Genauigkeit bei: {ganauigkeit * 100}")
+    print("_______Fertig mit trainieren, nun wird getestet!_______")
+
+    # Testen
+    modell = tf.keras.models.load_model(name)
+    verlust, ganauigkeit = modell.evaluate(xTest, yTest)
+
+    print(f"Der Verlust liegt bei: {verlust} " +
+        f"und die Genauigkeit bei: {ganauigkeit * 100}")
+
+
+if __name__ == "__main__":
+    main()
