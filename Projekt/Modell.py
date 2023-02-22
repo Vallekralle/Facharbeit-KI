@@ -1,5 +1,6 @@
 # Modul von außen
 import tensorflow as tf
+import sys
 
 
 class Modell:
@@ -49,25 +50,38 @@ name = "HandschriftModell"
 
 
 def main():
-    # Trainingssätze und Testsätze für KNN
     datenSatz = tf.keras.datasets.mnist
     (xTraining, yTraining), (xTest, yTest) = datenSatz.load_data()
-
-    xTraining = tf.keras.utils.normalize(xTraining, axis=1)
-    xTest = tf.keras.utils.normalize(xTest, axis=1)
     
-    # Training
-    modell = Modell(xTraining, yTraining, name)
-    modell.traniereModell()
+    auswahl = int(input("Möchtest du trainieren(1) oder testen(2)? " + 
+                        "(3 zum verlassen): "))
+        
+    try:
+        if auswahl == 1:
+            # Trainingssätze und Testsätze für KNN
+            xTraining = tf.keras.utils.normalize(xTraining, axis=1)
+            xTest = tf.keras.utils.normalize(xTest, axis=1)
+                
+            # Training
+            modell = Modell(xTraining, yTraining, name)
+            modell.traniereModell()
+            
 
-    print("_______Fertig mit trainieren, nun wird getestet!_______")
+        if auswahl == 2:
+            # Testen
+            modell = tf.keras.models.load_model(name)
+            verlust, ganauigkeit = modell.evaluate(xTest, yTest)
 
-    # Testen
-    modell = tf.keras.models.load_model(name)
-    verlust, ganauigkeit = modell.evaluate(xTest, yTest)
-
-    print(f"Der Verlust liegt bei: {verlust} " +
-        f"und die Genauigkeit bei: {ganauigkeit * 100}")
+            print(f"Der Verlust liegt bei: {verlust} " +
+                f"und die Genauigkeit bei: {ganauigkeit * 100}")
+        
+        sys.exit() if auswahl == 3 else False
+        
+        main()
+    
+    except Exception as e:
+        print(e)
+        main()
 
 
 if __name__ == "__main__":
