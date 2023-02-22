@@ -1,6 +1,7 @@
 # Module von außen 
 import pygame
 import time
+from PIL import Image
 
 # Eigene Module
 from bloecke import Bloecke
@@ -149,10 +150,17 @@ def malen(mousePos):
 def bildschirmFoto():
     global bild
     
+    # Screenshot machen und Bild speichern
     datum = str(time.ctime()).replace(":", "-") + ".png"
     bild = FENSTER.subsurface(pygame.Rect(flaechenX, flaechenY, 
                                           bildBreite, bildHoehe))
     pygame.image.save(bild, pfad + datum)
+    
+    # Bildgroesse aendern und speichern
+    bild = Image.open(pfad + datum)
+    neueGroesse = bild.resize((28, 28))
+    neueGroesse.save(pfad + datum)
+    
 
 
 if __name__ == '__main__':
