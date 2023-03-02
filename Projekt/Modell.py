@@ -1,7 +1,6 @@
 # Modul von außen
-import tensorflow as tf
 import sys
-
+import tensorflow as tf
 
 class Modell:
     def __init__(self, xTraining, yTraining, name):
@@ -11,15 +10,15 @@ class Modell:
         
         self.modell = tf.keras.models.Sequential()
         
-        self.createModell()
+        self.erzeugeModell()
         
         self.modell.compile(
-            optimizer="adam", loss="sparse_categorical_crossentropy",
+            optimizer="ADAM", loss="sparse_categorical_crossentropy",
             metrics=["accuracy"]
         )
+    
         
-        
-    def createModell(self):
+    def erzeugeModell(self):
         # Eingabeschicht
         self.modell.add(tf.keras.layers.Flatten(
             input_shape=(28, 28)
@@ -28,13 +27,19 @@ class Modell:
         
         # verborgene Schichten
         self.modell.add(tf.keras.layers.Dense(
-            128, activation="relu"
+            128, activation="relu", use_bias=True
             )
         )
         self.modell.add(tf.keras.layers.Dense(
-            128, activation="relu"
+            128, activation="relu", use_bias=True
             )
         )
+        self.modell.add(tf.keras.layers.Dense(
+            128, activation="relu", use_bias=True
+            )
+        )
+        
+        # Ausgabeschicht
         self.modell.add(tf.keras.layers.Dense(
             10, activation="softmax"
             )
@@ -42,7 +47,7 @@ class Modell:
         
         
     def traniereModell(self):
-        self.modell.fit(self.xTraining, self.yTraining, epochs=1)
+        self.modell.fit(self.xTraining, self.yTraining, epochs=3)
         self.modell.save(self.name)
 
 

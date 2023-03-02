@@ -7,14 +7,14 @@ from PIL import Image
 import tensorflow as tf
 
 # Eigene Module
-from bloecke import Bloecke
+from Bloecke import Bloecke
 from Modell import name
 
 pygame.init()
 
 
 # Pygame Variablen zum einstellen des Fensters
-BREITE, HOEHE = 700, 700
+BREITE, HOEHE = 800, 800
 FENSTER = pygame.display.set_mode((BREITE, HOEHE))
 pygame.display.set_caption(
     "KI zum Erkennen von handgeschriebenen Zahlen")
@@ -22,8 +22,8 @@ FPS = 120
 WEIß = (255, 255, 255)
 
 # Variablen für die Zeichenflaeche und das Modell
-bildBreite, bildHoehe = 300, 300
-bloeckeAnzahl = 50 
+bildBreite, bildHoehe = 280, 280
+bloeckeAnzahl = 28
 bloeckListe = []
 
 flaechenBreite = flaechenHoehe = bildBreite / bloeckeAnzahl
@@ -170,7 +170,7 @@ def bildschirmFoto():
     
     # Bildgroesse aendern und speichern
     bild = Image.open(pfad + datum)
-    neueGroesse = bild.resize((28, 28))
+    neueGroesse = bild.resize((28, 28), reducing_gap=1)
     neueGroesse.save(pfad + datum)
     
     # Lasse nun das Modell die Zahl herausfinden
